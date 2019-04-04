@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1535571668 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quad.cpp
+	<stdio.h>
+	<GL/glut.h>
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\glut.h
+	"freeglut_std.h"
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1535591768 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quadtransform.cpp
+	<GL/glut.h>
+	<stdio.h>
+	<stdlib.h>
+
+1535591764 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\braco3d.cpp
+	<GL/glut.h>
+	<stdio.h>
+	<stdlib.h>
+
+1535591766 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\animatedtriangle.cpp
+	<iostream>
+	<GL/glut.h>
+	<glcFPSViewer.h>
+
+1535591408 c:\users\andre luiz\desktop\computacao grafica\cg\shared\glcfpsviewer.h
+	"glcFPSViewer.h"
+
+1553201715 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\braco3d2.cpp
+	<GL/glut.h>
+	<stdio.h>
+	<stdlib.h>
+

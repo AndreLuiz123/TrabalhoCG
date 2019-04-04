@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1553179943 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quadtransform.cpp
+	<GL/glut.h>
+	<stdio.h>
+	<stdlib.h>
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\glut.h
+	"freeglut_std.h"
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+

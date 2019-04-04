@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1554406264 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<math.h>
+	"extras.h"
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\glut.h
+	"freeglut_std.h"
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1540425854 c:\users\andre luiz\desktop\computacao grafica\cg\src\extras.h
+

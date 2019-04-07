@@ -1,10 +1,11 @@
 # depslib dependency file v1.0
-1554406264 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
+1554639966 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
 	<ctype.h>
 	<math.h>
+	<iostream>
 	"extras.h"
 
 1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\glut.h
@@ -19,4 +20,8 @@
 	<stdlib.h>
 
 1540425854 c:\users\andre luiz\desktop\computacao grafica\cg\src\extras.h
+
+1554580636 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quadcolor.cpp
+	<stdio.h>
+	<GL/glut.h>
 

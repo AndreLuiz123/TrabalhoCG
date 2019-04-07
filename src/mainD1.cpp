@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
-
+#include <iostream>
 #include "extras.h"
 
 /// Estruturas iniciais para armazenar vertices
@@ -22,9 +22,10 @@ class triangle
 
 /// Globals
 float zdist = 5.0;
-float rotationX = 0.0, rotationY = 0.0;
+float rotationX = 0.0, rotationY = 0.0, posX=1.0, posY=1.0;
 int   last_x, last_y;
 int   width, height;
+int numeroPontos = 0;
 
 
 /// Functions
@@ -99,8 +100,41 @@ void drawObject()
 
 void display(void)
 {
-    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    ///Cada metade da tela tem sua própria viewport e tem o Scissor atuando nela
+
+
+    ///A primeira metade é aquela na qual existe o desenho do gráfico
+    ///O scissor é ativado para fazer os desenhos nessa metade
+    glViewport(0 ,0, width/2, height);
+    glScissor(0, 0, width/2, height);
+    glEnable(GL_SCISSOR_TEST);
+    glClearColor(0, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+    glOrtho(-1,1,-1,1,0,0);
+    glBegin(GL_LINES);
+    glColor3b(1,1,0);
+    glVertex2d(-2,0);
+    glVertex2d(2,0);
+    glVertex2d(0,-3);
+    glVertex2d(0,3);
+    glEnd();
+    glBegin(GL_POINTS);
+    for(int i=0; i<numeroPontos; i++){
+        glColor3b(0,0,1);
+        glVertex2d(posX,posY);
+    }
+    glEnd();
+    glDisable(GL_SCISSOR_TEST);
+
+    ///A segunda metade é aquela na qual existe a imagem 3D
+    ///O scissor é ativado para fazer os desenhos nessa metade
+    glViewport(width/2 ,0, width/2, height);
+    glScissor(width/2 ,0, width/2, height);
+    glEnable(GL_SCISSOR_TEST);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -111,6 +145,7 @@ void display(void)
         glRotatef( rotationX, 1.0, 0.0, 0.0 );
         drawObject();
     glPopMatrix();
+    glDisable(GL_SCISSOR_TEST);
 
     glutSwapBuffers();
 }
@@ -125,10 +160,10 @@ void reshape (int w, int h)
     width = w;
     height = h;
 
-    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
+    glViewport (0, 0, (GLsizei) w/2, (GLsizei) h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-    gluPerspective(60.0, (GLfloat) w/(GLfloat) h, 0.01, 200.0);
+    gluPerspective(60.0, (GLfloat) w*0.5f/(GLfloat) h, 0.01, 200.0);
 }
 
 void keyboard (unsigned char key, int x, int y)
@@ -159,6 +194,10 @@ void mouse(int button, int state, int x, int y)
     {
         last_x = x;
         last_y = y;
+        posX = (float)x/100 -2;
+        posY = 3 - (float)y/100;
+        std::cout<<x<<" "<<y<<" "<<posX<<" "<<posY<<std::endl;
+        numeroPontos++;
     }
     if(button == 3) // Scroll up
     {
@@ -176,8 +215,8 @@ int main(int argc, char** argv)
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize (800, 600);
-    glutInitWindowPosition (100, 100);
-    glutCreateWindow (argv[0]);
+    glutInitWindowPosition (0, 0);
+    glutCreateWindow ("Trabalho de CG");
     init ();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);

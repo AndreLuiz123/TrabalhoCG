@@ -23,7 +23,7 @@ class triangle
 
 /// Globals
 float zdist = 5.0;
-float rotationX = 0.0, rotationY = 0.0, posX=1.0, posY=1.0;
+float rotationX = 0.0, rotationY = 0.0, posZ=1.0, posY=1.0;
 int   last_x, last_y;
 int   width, height;
 int numeroPontos = 0;
@@ -110,9 +110,24 @@ void drawObject()
 
 void drawNewObject(){
 
+    vertice vetorNormal;
+    vertice v[4] = {{lastVertice1.x,  lastVertice1.y, lastVertice1.z},
+                    {lastVertice2.x,  lastVertice2.y, lastVertice2.z},
+                    {lastVertice1.x,  posY, posZ},
+                    {lastVertice2.x,  posY, posZ}};
 
+    triangle t[2] = {{v[0], v[1], v[2]},
+                     {v[1], v[3], v[2]}};
 
-
+    glBegin(GL_TRIANGLES);
+        for(int i = 0; i < 2; i++) // triangulos
+        {
+            CalculaNormal(t[i], &vetorNormal); // Passa face triangular e endereço do vetor normal de saída
+            glNormal3f(vetorNormal.x, vetorNormal.y,vetorNormal.z);
+            for(int j = 0; j < 3; j++) // vertices do triangulo
+                glVertex3d(t[i].v[j].x, t[i].v[j].y, t[i].v[j].z);
+        }
+    glEnd();
 }
 
 void display(void)
@@ -137,9 +152,11 @@ void display(void)
             glVertex2d(0,-3);
             glVertex2d(0,3);
         glEnd();
+        glPointSize(10);
+        glEnable(GL_SMOOTH);
         glBegin(GL_POINTS);
             glColor3b(0,0,1);
-            glVertex2d(posX,posY);
+            glVertex2d(posZ,posY);
             glVertex2d(initialVerticesV1.z, initialVerticesV1.y);
             glVertex2d(initialVerticesV2.z, initialVerticesV2.y);
             glVertex2d(initialVerticesV3.z, initialVerticesV3.y);
@@ -163,14 +180,15 @@ void display(void)
             glRotatef( rotationY, 0.0, 1.0, 0.0 );
             glRotatef( rotationX, 1.0, 0.0, 0.0 );
             drawObject();
-            glBegin(GL_TRIANGLES);
-            glVertex3d(lastVertice1.x,  lastVertice1.y, 0.0);
-            glVertex3d(lastVertice2.x,  lastVertice2.y, 0.0);
-            glVertex3d(posX,  posY, 0.0);
-            glVertex3d(posX,  posY, 0.0);
-            glVertex3d(posX+(lastVertice1.x-lastVertice2.x),  posY, 0.0);
-            glVertex3d(lastVertice1.x,  lastVertice1.y, 0.0);
-            glEnd();
+           /* glBegin(GL_TRIANGLES);
+            glVertex3d(lastVertice1.x,  lastVertice1.y, lastVertice1.z);
+            glVertex3d(lastVertice2.x,  lastVertice2.y, lastVertice2.z);
+            glVertex3d(lastVertice2.x,  posY, posZ);
+            glVertex3d(lastVertice2.x,  posY, posZ);
+            glVertex3d(lastVertice1.x,  lastVertice1.y, lastVertice1.z);
+            glVertex3d(lastVertice1.x,  posY, posZ);
+            glEnd();*/
+            drawNewObject();
         glPopMatrix();
 
     glDisable(GL_SCISSOR_TEST);
@@ -222,10 +240,11 @@ void mouse(int button, int state, int x, int y)
     {
         last_x = x;
         last_y = y;
-        posX = (float)x/100 -2;
+        posZ = (float)x/100 -2;
         posY = 3 - (float)y/100;
-        std::cout<<x<<" "<<y<<" "<<posX<<" "<<posY<<std::endl;
+        std::cout<<x<<" "<<y<<" "<<posZ<<" "<<posY<<std::endl;
         numeroPontos++;
+
     }
     if(button == 3) // Scroll up
     {

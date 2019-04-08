@@ -7,6 +7,8 @@
 #include "extras.h"
 #include <vector>
 
+using namespace std;
+
 /// Estruturas iniciais para armazenar vertices
 //  Você poderá utilizá-las adicionando novos métodos (de acesso por exemplo) ou usar suas próprias estruturas.
 class vertice
@@ -36,6 +38,7 @@ vertice initialVerticesV4 = { 1.0f,  1.0f,  -0.5f};
 vertice lastVertice1 = initialVerticesV1;
 vertice lastVertice2 = initialVerticesV2;
 
+std::vector<vertice> vert;
 
 
 /// Functions
@@ -43,6 +46,11 @@ void init(void)
 {
     initLight(width, height); // Função extra para tratar iluminação.
 //    setMaterials();
+  vert.push_back(initialVerticesV1);
+  vert.push_back(initialVerticesV2);
+  vert.push_back(initialVerticesV3);
+  vert.push_back(initialVerticesV4);
+
 }
 
 /* Exemplo de cálculo de vetor normal que são definidos a partir dos vértices do triângulo;
@@ -157,10 +165,11 @@ void display(void)
         glBegin(GL_POINTS);
             glColor3b(0,0,1);
             glVertex2d(posZ,posY);
-            glVertex2d(initialVerticesV1.z, initialVerticesV1.y);
-            glVertex2d(initialVerticesV2.z, initialVerticesV2.y);
+            for(int i = 0; i<vert.size(); i++)
+            glVertex2d(vert[i].z, vert[i].y);
+            /*glVertex2d(initialVerticesV2.z, initialVerticesV2.y);
             glVertex2d(initialVerticesV3.z, initialVerticesV3.y);
-            glVertex2d(initialVerticesV4.z, initialVerticesV4.y);
+            glVertex2d(initialVerticesV4.z, initialVerticesV4.y);*/
         glEnd();
     glDisable(GL_SCISSOR_TEST);
 
@@ -188,7 +197,7 @@ void display(void)
             glVertex3d(lastVertice1.x,  lastVertice1.y, lastVertice1.z);
             glVertex3d(lastVertice1.x,  posY, posZ);
             glEnd();*/
-            drawNewObject();
+            drawNewObject(); ///<- Funcao que sera sera utilizada
         glPopMatrix();
 
     glDisable(GL_SCISSOR_TEST);
@@ -243,8 +252,13 @@ void mouse(int button, int state, int x, int y)
         posZ = (float)x/100 -2;
         posY = 3 - (float)y/100;
         std::cout<<x<<" "<<y<<" "<<posZ<<" "<<posY<<std::endl;
-        numeroPontos++;
+        vertice newVertice;
 
+        newVertice.z = posZ;
+        newVertice.y = posY;
+        newVertice.x = 0;
+
+        vert.push_back(newVertice);
     }
     if(button == 3) // Scroll up
     {

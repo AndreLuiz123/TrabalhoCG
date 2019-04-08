@@ -5,6 +5,7 @@
 #include <math.h>
 #include <iostream>
 #include "extras.h"
+#include <vector>
 
 /// Estruturas iniciais para armazenar vertices
 //  Você poderá utilizá-las adicionando novos métodos (de acesso por exemplo) ou usar suas próprias estruturas.
@@ -27,12 +28,21 @@ int   last_x, last_y;
 int   width, height;
 int numeroPontos = 0;
 
+vertice initialVerticesV1 = {-1.0f, -1.0f,  0.0f};
+vertice initialVerticesV2 = { 1.0f, -1.0f,  0.0f};
+vertice initialVerticesV3 = {-1.0f,  1.0f,  0.0f};
+vertice initialVerticesV4 = { 1.0f,  1.0f,  -0.5f};
+
+vertice lastVertice1 = initialVerticesV1;
+vertice lastVertice2 = initialVerticesV2;
+
+
 
 /// Functions
 void init(void)
 {
     initLight(width, height); // Função extra para tratar iluminação.
- //   setMaterials();
+//    setMaterials();
 }
 
 /* Exemplo de cálculo de vetor normal que são definidos a partir dos vértices do triângulo;
@@ -98,6 +108,13 @@ void drawObject()
     glEnd();
 }
 
+void drawNewObject(){
+
+
+
+
+}
+
 void display(void)
 {
     //glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -110,22 +127,24 @@ void display(void)
     glViewport(0 ,0, width/2, height);
     glScissor(0, 0, width/2, height);
     glEnable(GL_SCISSOR_TEST);
-    glClearColor(0, 0, 1, 1);
-    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-    glOrtho(-1,1,-1,1,0,0);
-    glBegin(GL_LINES);
-    glColor3b(1,1,0);
-    glVertex2d(-2,0);
-    glVertex2d(2,0);
-    glVertex2d(0,-3);
-    glVertex2d(0,3);
-    glEnd();
-    glBegin(GL_POINTS);
-    for(int i=0; i<numeroPontos; i++){
-        glColor3b(0,0,1);
-        glVertex2d(posX,posY);
-    }
-    glEnd();
+        glClearColor(0, 0, 1, 1);
+        glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+        glOrtho(-1,1,-1,1,0,0);
+        glBegin(GL_LINES);
+            glColor3b(1,1,0);
+            glVertex2d(-2,0);
+            glVertex2d(2,0);
+            glVertex2d(0,-3);
+            glVertex2d(0,3);
+        glEnd();
+        glBegin(GL_POINTS);
+            glColor3b(0,0,1);
+            glVertex2d(posX,posY);
+            glVertex2d(initialVerticesV1.z, initialVerticesV1.y);
+            glVertex2d(initialVerticesV2.z, initialVerticesV2.y);
+            glVertex2d(initialVerticesV3.z, initialVerticesV3.y);
+            glVertex2d(initialVerticesV4.z, initialVerticesV4.y);
+        glEnd();
     glDisable(GL_SCISSOR_TEST);
 
     ///A segunda metade é aquela na qual existe a imagem 3D
@@ -133,18 +152,27 @@ void display(void)
     glViewport(width/2 ,0, width/2, height);
     glScissor(width/2 ,0, width/2, height);
     glEnable(GL_SCISSOR_TEST);
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-    gluLookAt (0.0, 0.0, zdist, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+        gluLookAt (0.0, 0.0, zdist, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    glPushMatrix();
-        glRotatef( rotationY, 0.0, 1.0, 0.0 );
-        glRotatef( rotationX, 1.0, 0.0, 0.0 );
-        drawObject();
-    glPopMatrix();
+        glPushMatrix();
+            glRotatef( rotationY, 0.0, 1.0, 0.0 );
+            glRotatef( rotationX, 1.0, 0.0, 0.0 );
+            drawObject();
+            glBegin(GL_TRIANGLES);
+            glVertex3d(lastVertice1.x,  lastVertice1.y, 0.0);
+            glVertex3d(lastVertice2.x,  lastVertice2.y, 0.0);
+            glVertex3d(posX,  posY, 0.0);
+            glVertex3d(posX,  posY, 0.0);
+            glVertex3d(posX+(lastVertice1.x-lastVertice2.x),  posY, 0.0);
+            glVertex3d(lastVertice1.x,  lastVertice1.y, 0.0);
+            glEnd();
+        glPopMatrix();
+
     glDisable(GL_SCISSOR_TEST);
 
     glutSwapBuffers();

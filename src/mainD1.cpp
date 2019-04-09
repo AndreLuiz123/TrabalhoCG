@@ -23,12 +23,20 @@ class triangle
         vertice v[3];
 };
 
+class grupo
+{
+    public:
+        std::vector<vertice> verticesGrupo;
+        std::vector<triangle> triangulosGrupo;
+};
+
 /// Globals
 float zdist = 5.0;
 float rotationX = 0.0, rotationY = 0.0, posZ=1.0, posY=1.0;
 int   last_x, last_y;
 int   width, height;
 int numeroPontos = 0;
+int grupoAtual=0;
 
 vertice initialVerticesV1 = {-1.0f, -1.0f,  0.0f};
 vertice initialVerticesV2 = { 1.0f, -1.0f,  0.0f};
@@ -40,16 +48,23 @@ vertice lastVertice2 = initialVerticesV2;
 
 std::vector<vertice> vert;
 std::vector<triangle> triang;
+std::vector<grupo> grupos;
+
+grupo gr;
+
 
 /// Functions
 void init(void)
 {
     initLight(width, height); // Função extra para tratar iluminação.
 //    setMaterials();
-  vert.push_back(initialVerticesV1);
+
+    grupos.push_back(gr);
+
+  /*vert.push_back(initialVerticesV1);
   vert.push_back(initialVerticesV2);
   vert.push_back(initialVerticesV3);
-  vert.push_back(initialVerticesV4);
+  vert.push_back(initialVerticesV4);*/
 }
 
 /* Exemplo de cálculo de vetor normal que são definidos a partir dos vértices do triângulo;
@@ -125,8 +140,8 @@ void drawNewObject(){
     triangle t[2] = {{v[0], v[1], v[2]},
                      {v[1], v[3], v[2]}};
 
-     triang.push_back(t[0]);
-     triang.push_back(t[1]);
+     grupos[grupoAtual].triangulosGrupo.push_back(t[0]);
+     grupos[grupoAtual].triangulosGrupo.push_back(t[1]);
     /*glBegin(GL_TRIANGLES);
         for(int i = 0; i < 2; i++) // triangulos
         {
@@ -147,41 +162,50 @@ void display(void)
 
     ///A primeira metade é aquela na qual existe o desenho do gráfico
     ///O scissor é ativado para fazer os desenhos nessa metade
+    glClearColor(0, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
     glViewport(0 ,0, width/2, height);
-    glScissor(0, 0, width/2, height);
-    glEnable(GL_SCISSOR_TEST);
-        glClearColor(0, 0, 1, 1);
-        glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-        glOrtho(-1,1,-1,1,0,0);
+   /// glScissor(0, 0, width/2, height);
+   /// glEnable(GL_SCISSOR_TEST);
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-1,1,-1,1,-1,1);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
         glBegin(GL_LINES);
             glColor3b(1,1,0);
-            glVertex2d(-2,0);
-            glVertex2d(2,0);
-            glVertex2d(0,-3);
-            glVertex2d(0,3);
+            glVertex2d(-1,0);
+            glVertex2d(1,0);
+            glVertex2d(0,-1);
+            glVertex2d(0,1);
         glEnd();
         glPointSize(10);
         glEnable(GL_SMOOTH);
         glBegin(GL_POINTS);
             glColor3b(0,0,1);
             glVertex2d(posZ,posY);
-            for(int i = 0; i<vert.size(); i++)
-            glVertex2d(vert[i].z, vert[i].y);
+            for(int j = 0; j<grupos.size(); j++)
+            for(int i = 0; i<grupos[grupoAtual].verticesGrupo.size(); i++)
+            glVertex2d(grupos[grupoAtual].verticesGrupo[i].z, grupos[grupoAtual].verticesGrupo[i].y);
             /*glVertex2d(initialVerticesV2.z, initialVerticesV2.y);
             glVertex2d(initialVerticesV3.z, initialVerticesV3.y);
             glVertex2d(initialVerticesV4.z, initialVerticesV4.y);*/
         glEnd();
-    glDisable(GL_SCISSOR_TEST);
+    ///glDisable(GL_SCISSOR_TEST);
 
     ///A segunda metade é aquela na qual existe a imagem 3D
     ///O scissor é ativado para fazer os desenhos nessa metade
     glViewport(width/2 ,0, width/2, height);
-    glScissor(width/2 ,0, width/2, height);
-    glEnable(GL_SCISSOR_TEST);
-        glClearColor(0, 0, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    gluPerspective(60.0, (GLfloat) width*0.5f/(GLfloat) height, 0.01, 200.0);
+    glMatrixMode(GL_MODELVIEW);
+       // glLoadIdentity();
+    ///glScissor(width/2 ,0, width/2, height);
+    ///glEnable(GL_SCISSOR_TEST);
+        ///glClearColor(0, 0, 0, 1);
+        ////glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+
 
         gluLookAt (0.0, 0.0, zdist, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
@@ -199,14 +223,14 @@ void display(void)
             glEnd();*/
             drawNewObject(); ///<- Funcao que sera sera utilizada
             glBegin(GL_TRIANGLES);
-                for(int i=0; i<triang.size(); i++){
+                for(int i=0; i<grupos[grupoAtual].triangulosGrupo.size(); i++){
                     for(int j=0; j<3; j++)
-                      glVertex3d(triang[i].v[j].x, triang[i].v[j].y, triang[i].v[j].z);
+                      glVertex3d(grupos[grupoAtual].triangulosGrupo[i].v[j].x, grupos[grupoAtual].triangulosGrupo[i].v[j].y, grupos[grupoAtual].triangulosGrupo[i].v[j].z);
                 }
             glEnd();
         glPopMatrix();
 
-    glDisable(GL_SCISSOR_TEST);
+    ///glDisable(GL_SCISSOR_TEST);
 
     glutSwapBuffers();
 }
@@ -255,8 +279,8 @@ void mouse(int button, int state, int x, int y)
     {
         last_x = x;
         last_y = y;
-        posZ = (float)x/100 -2;
-        posY = 3 - (float)y/100;
+        posZ = ((float)x*4)/width -1;
+        posY = -(((float)y*2)/height -1);
         std::cout<<x<<" "<<y<<" "<<posZ<<" "<<posY<<std::endl;
         vertice newVertice;
 
@@ -264,7 +288,7 @@ void mouse(int button, int state, int x, int y)
         newVertice.y = posY;
         newVertice.x = 0;
 
-        vert.push_back(newVertice);
+        grupos[grupoAtual].verticesGrupo.push_back(newVertice);
     }
     if(button == 3) // Scroll up
     {

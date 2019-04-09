@@ -39,7 +39,7 @@ vertice lastVertice1 = initialVerticesV1;
 vertice lastVertice2 = initialVerticesV2;
 
 std::vector<vertice> vert;
-
+std::vector<triangle> triang;
 
 /// Functions
 void init(void)
@@ -50,7 +50,6 @@ void init(void)
   vert.push_back(initialVerticesV2);
   vert.push_back(initialVerticesV3);
   vert.push_back(initialVerticesV4);
-
 }
 
 /* Exemplo de cálculo de vetor normal que são definidos a partir dos vértices do triângulo;
@@ -118,7 +117,6 @@ void drawObject()
 
 void drawNewObject(){
 
-    vertice vetorNormal;
     vertice v[4] = {{lastVertice1.x,  lastVertice1.y, lastVertice1.z},
                     {lastVertice2.x,  lastVertice2.y, lastVertice2.z},
                     {lastVertice1.x,  posY, posZ},
@@ -127,15 +125,17 @@ void drawNewObject(){
     triangle t[2] = {{v[0], v[1], v[2]},
                      {v[1], v[3], v[2]}};
 
-    glBegin(GL_TRIANGLES);
+     triang.push_back(t[0]);
+     triang.push_back(t[1]);
+    /*glBegin(GL_TRIANGLES);
         for(int i = 0; i < 2; i++) // triangulos
         {
-            CalculaNormal(t[i], &vetorNormal); // Passa face triangular e endereço do vetor normal de saída
-            glNormal3f(vetorNormal.x, vetorNormal.y,vetorNormal.z);
             for(int j = 0; j < 3; j++) // vertices do triangulo
                 glVertex3d(t[i].v[j].x, t[i].v[j].y, t[i].v[j].z);
         }
-    glEnd();
+    glEnd();*/
+    lastVertice1 = v[2];
+    lastVertice2 = v[3];
 }
 
 void display(void)
@@ -198,6 +198,12 @@ void display(void)
             glVertex3d(lastVertice1.x,  posY, posZ);
             glEnd();*/
             drawNewObject(); ///<- Funcao que sera sera utilizada
+            glBegin(GL_TRIANGLES);
+                for(int i=0; i<triang.size(); i++){
+                    for(int j=0; j<3; j++)
+                      glVertex3d(triang[i].v[j].x, triang[i].v[j].y, triang[i].v[j].z);
+                }
+            glEnd();
         glPopMatrix();
 
     glDisable(GL_SCISSOR_TEST);

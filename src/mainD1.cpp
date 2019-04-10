@@ -32,7 +32,7 @@ class grupo
 
 /// Globals
 float zdist = 5.0;
-float rotationX = 0.0, rotationY = 0.0, posZ=1.0, posY=1.0;
+float rotationX = 0.0, rotationY = 0.0, posZ, posY,posZ1, posY1,posZ2, posY2;
 int   last_x, last_y;
 int   width, height;
 int numeroPontos = 0;
@@ -132,10 +132,10 @@ void drawObject()
 
 void drawNewObject(){
 
-    vertice v[4] = {{lastVertice1.x,  lastVertice1.y, lastVertice1.z},
-                    {lastVertice2.x,  lastVertice2.y, lastVertice2.z},
-                    {lastVertice1.x,  posY, posZ},
-                    {lastVertice2.x,  posY, posZ}};
+    vertice v[4] = {{-1, posY1, posZ1},
+                    { 1, posY1, posZ1},
+                    {-1, posY2, posZ2},
+                    { 1, posY2, posZ2}};
 
     triangle t[2] = {{v[0], v[1], v[2]},
                      {v[1], v[3], v[2]}};
@@ -149,8 +149,8 @@ void drawNewObject(){
                 glVertex3d(t[i].v[j].x, t[i].v[j].y, t[i].v[j].z);
         }
     glEnd();*/
-    lastVertice1 = v[2];
-    lastVertice2 = v[3];
+
+
 }
 
 void display(void)
@@ -183,8 +183,6 @@ void display(void)
         glPointSize(10);
         glEnable(GL_SMOOTH);
         glBegin(GL_POINTS);
-            glColor3b(0,0,1);
-            glVertex2d(posZ,posY);
             for(int j = 0; j<grupos.size(); j++)
             for(int i = 0; i<grupos[grupoAtual].verticesGrupo.size(); i++)
             glVertex2d(grupos[grupoAtual].verticesGrupo[i].z, grupos[grupoAtual].verticesGrupo[i].y);
@@ -212,22 +210,15 @@ void display(void)
         glPushMatrix();
             glRotatef( rotationY, 0.0, 1.0, 0.0 );
             glRotatef( rotationX, 1.0, 0.0, 0.0 );
-            drawObject();
-           /* glBegin(GL_TRIANGLES);
-            glVertex3d(lastVertice1.x,  lastVertice1.y, lastVertice1.z);
-            glVertex3d(lastVertice2.x,  lastVertice2.y, lastVertice2.z);
-            glVertex3d(lastVertice2.x,  posY, posZ);
-            glVertex3d(lastVertice2.x,  posY, posZ);
-            glVertex3d(lastVertice1.x,  lastVertice1.y, lastVertice1.z);
-            glVertex3d(lastVertice1.x,  posY, posZ);
-            glEnd();*/
-            drawNewObject(); ///<- Funcao que sera sera utilizada
+              drawNewObject();
+
             glBegin(GL_TRIANGLES);
                 for(int i=0; i<grupos[grupoAtual].triangulosGrupo.size(); i++){
                     for(int j=0; j<3; j++)
                       glVertex3d(grupos[grupoAtual].triangulosGrupo[i].v[j].x, grupos[grupoAtual].triangulosGrupo[i].v[j].y, grupos[grupoAtual].triangulosGrupo[i].v[j].z);
                 }
             glEnd();
+
         glPopMatrix();
 
     ///glDisable(GL_SCISSOR_TEST);
@@ -281,14 +272,35 @@ void mouse(int button, int state, int x, int y)
         last_y = y;
         posZ = ((float)x*4)/width -1;
         posY = -(((float)y*2)/height -1);
-        std::cout<<x<<" "<<y<<" "<<posZ<<" "<<posY<<std::endl;
+
+        if(posZ<1){
         vertice newVertice;
 
-        newVertice.z = posZ;
-        newVertice.y = posY;
         newVertice.x = 0;
+        newVertice.y = posY;
+        newVertice.z = posZ;
+          grupos[grupoAtual].verticesGrupo.push_back(newVertice);
 
-        grupos[grupoAtual].verticesGrupo.push_back(newVertice);
+        if(grupos[grupoAtual].verticesGrupo.size()>2){
+            posZ1 = grupos[grupoAtual].verticesGrupo[grupos[grupoAtual].verticesGrupo.size()-2].z;
+            posY1 = grupos[grupoAtual].verticesGrupo[grupos[grupoAtual].verticesGrupo.size()-2].y;
+            posZ2 = posZ;
+            posY2 = posY;
+            cout<<posZ1<<" e "<<posY1<<" teste "<<posZ2<<" e "<<posY2<<endl;
+        }else{
+                posZ1 = grupos[grupoAtual].verticesGrupo[0].z;
+                posY1 = grupos[grupoAtual].verticesGrupo[0].y;
+                posZ2 = posZ;
+                posY2 = posY;
+
+        }
+
+
+          std::cout<<   grupos[grupoAtual].verticesGrupo.size()<<std::endl;
+
+        }
+
+
     }
     if(button == 3) // Scroll up
     {

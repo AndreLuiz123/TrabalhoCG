@@ -37,6 +37,9 @@ int   last_x, last_y;
 int   width, height;
 int numeroPontos = 0;
 int grupoAtual=0;
+int altura=1;
+int ultimaAltura, alturaAtual, triangulosTirados = 0;
+bool apagarTela;
 
 vertice initialVerticesV1 = {-1.0f, -1.0f,  0.0f};
 vertice initialVerticesV2 = { 1.0f, -1.0f,  0.0f};
@@ -132,10 +135,12 @@ void drawObject()
 
 void drawNewObject(){
 
-    vertice v[4] = {{-1, posY1, posZ1},
-                    { 1, posY1, posZ1},
-                    {-1, posY2, posZ2},
-                    { 1, posY2, posZ2}};
+    //ultimaAltura = altura;
+
+    vertice v[4] = {{-1*ultimaAltura, posY1, posZ1},
+                    { ultimaAltura, posY1, posZ1},
+                    {-1*altura, posY2, posZ2},
+                    { altura, posY2, posZ2}};
 
     triangle t[2] = {{v[0], v[1], v[2]},
                      {v[1], v[3], v[2]}};
@@ -149,7 +154,8 @@ void drawNewObject(){
                 glVertex3d(t[i].v[j].x, t[i].v[j].y, t[i].v[j].z);
         }
     glEnd();*/
-
+    //
+    ultimaAltura = altura;
 
 }
 
@@ -158,7 +164,6 @@ void display(void)
     //glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     ///Cada metade da tela tem sua própria viewport e tem o Scissor atuando nela
-
 
     ///A primeira metade é aquela na qual existe o desenho do gráfico
     ///O scissor é ativado para fazer os desenhos nessa metade
@@ -194,11 +199,14 @@ void display(void)
 
     ///A segunda metade é aquela na qual existe a imagem 3D
     ///O scissor é ativado para fazer os desenhos nessa metade
+
+
+
     glViewport(width/2 ,0, width/2, height);
     glMatrixMode(GL_PROJECTION);
     gluPerspective(60.0, (GLfloat) width*0.5f/(GLfloat) height, 0.01, 200.0);
     glMatrixMode(GL_MODELVIEW);
-       // glLoadIdentity();
+        glLoadIdentity();
     ///glScissor(width/2 ,0, width/2, height);
     ///glEnable(GL_SCISSOR_TEST);
         ///glClearColor(0, 0, 0, 1);
@@ -216,10 +224,13 @@ void display(void)
                 for(int i=0; i<grupos[grupoAtual].triangulosGrupo.size(); i++){
                     for(int j=0; j<3; j++)
                       glVertex3d(grupos[grupoAtual].triangulosGrupo[i].v[j].x, grupos[grupoAtual].triangulosGrupo[i].v[j].y, grupos[grupoAtual].triangulosGrupo[i].v[j].z);
+
                 }
             glEnd();
 
         glPopMatrix();
+
+     apagarTela = false;
 
     ///glDisable(GL_SCISSOR_TEST);
 
@@ -253,6 +264,21 @@ void keyboard (unsigned char key, int x, int y)
     }
 }
 
+void specialKeysPress (int key, int x, int y)
+{
+
+
+    switch (tolower(key))
+    {
+        case GLUT_KEY_UP:
+            altura++;
+            break;
+        case GLUT_KEY_DOWN:
+            altura--;
+            break;
+    }
+}
+
 // Motion callback
 void motion(int x, int y )
 {
@@ -272,7 +298,7 @@ void mouse(int button, int state, int x, int y)
         last_y = y;
         posZ = ((float)x*4)/width -1;
         posY = -(((float)y*2)/height -1);
-
+        //ultimaAltura = altura;
         if(posZ<1){
         vertice newVertice;
 
@@ -302,13 +328,22 @@ void mouse(int button, int state, int x, int y)
 
 
     }
+
+    if ( button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN ){
+          if(grupos[grupoAtual].verticesGrupo.size()>0){
+             grupos[grupoAtual].verticesGrupo.pop_back();
+             grupos[grupoAtual].triangulosGrupo.pop_back();
+          }
+
+    }
+
     if(button == 3) // Scroll up
     {
-        zdist+=1.0f;
+        zdist+=1.0;
     }
     if(button == 4) // Scroll Down
     {
-        zdist-=1.0f;
+        zdist-=1.0;
     }
 }
 
@@ -326,6 +361,7 @@ int main(int argc, char** argv)
     glutMouseFunc( mouse );
     glutMotionFunc( motion );
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialKeysPress);
     glutIdleFunc(idle);
     glutMainLoop();
     return 0;

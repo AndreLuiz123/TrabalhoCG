@@ -20,3 +20,24 @@
 	<string.h>
 	<GL/glut.h>
 
+1555442700 source:/ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/main.cpp
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<math.h>
+	<iostream>
+	"extras.h"
+	<vector>
+	"Titulo.h"
+
+1555442700 /ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/extras.h
+
+1555442700 /ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/Titulo.h
+
+1555442700 source:/ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/Titulo.cpp
+	"Titulo.h"
+	<stdio.h>
+	<string.h>
+	<GL/glut.h>
+

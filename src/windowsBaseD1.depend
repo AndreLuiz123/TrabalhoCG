@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1554937375 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
+1555526746 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
@@ -8,6 +8,7 @@
 	<iostream>
 	"extras.h"
 	<vector>
+	"Titulo.h"
 
 1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\glut.h
 	"freeglut_std.h"
@@ -25,4 +26,12 @@
 1554580636 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quadcolor.cpp
 	<stdio.h>
 	<GL/glut.h>
+
+1555520631 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\titulo.cpp
+	"Titulo.h"
+	<stdio.h>
+	<string.h>
+	<GL/glut.h>
+
+1555520632 c:\users\andre luiz\desktop\computacao grafica\cg\src\titulo.h
 

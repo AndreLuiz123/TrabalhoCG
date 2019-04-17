@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1554580636 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quadcolor.cpp
+	<stdio.h>
+	<GL/glut.h>
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\glut.h
+	"freeglut_std.h"
+
+1368290960 c:\users\andre luiz\desktop\computacao grafica\cg\shared\windows\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+

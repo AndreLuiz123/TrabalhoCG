@@ -8,7 +8,6 @@
 */
 
 #include <stdio.h>
-#include <GL/glut.h>
 
 void display(void);
 void init (void);

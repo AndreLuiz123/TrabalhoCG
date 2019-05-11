@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1535571668 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\quad.cpp
+	<stdio.h>
+	<GL/glut.h>
+
+1535571282 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\3dview.cpp
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+

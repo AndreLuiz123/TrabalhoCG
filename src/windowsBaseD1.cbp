@@ -38,6 +38,8 @@
 			<Add library="libglew32.dll.a" />
 			<Add directory="../shared/windows/lib" />
 		</Linker>
+		<Unit filename="Titulo.cpp" />
+		<Unit filename="Titulo.h" />
 		<Unit filename="extrasD1.h" />
 		<Unit filename="mainD1.cpp" />
 		<Extensions>

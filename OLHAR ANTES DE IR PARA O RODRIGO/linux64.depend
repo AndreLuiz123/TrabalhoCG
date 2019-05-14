@@ -1,0 +1,43 @@
+# depslib dependency file v1.0
+1554941835 source:/ice/Downloads/CG/src/D1_20191_Base/main.cpp
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<math.h>
+	<iostream>
+	"extras.h"
+	<vector>
+	"Titulo.h"
+
+1554143668 /ice/Downloads/CG/src/D1_20191_Base/extras.h
+
+1554941862 /ice/Downloads/CG/src/D1_20191_Base/Titulo.h
+
+1554941924 source:/ice/Downloads/CG/src/D1_20191_Base/Titulo.cpp
+	"Titulo.h"
+	<stdio.h>
+	<string.h>
+	<GL/glut.h>
+
+1555442700 source:/ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/main.cpp
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<math.h>
+	<iostream>
+	"extras.h"
+	<vector>
+	"Titulo.h"
+
+1555442700 /ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/extras.h
+
+1555442700 /ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/Titulo.h
+
+1555442700 source:/ice/Downloads/TRABALHO CG ANDRE E SEANY/TrabalhoCG/OLHAR ANTES DE IR PARA O RODRIGO/Titulo.cpp
+	"Titulo.h"
+	<stdio.h>
+	<string.h>
+	<GL/glut.h>
+

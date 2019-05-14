@@ -25,7 +25,13 @@ public:
     vertice vetorNormal;
 };
 
-
+class objeto
+{
+public:
+    float posY;
+    float zdist;
+    std::vector<face> facesImg;
+};
 
 class triangle
 {
@@ -38,12 +44,28 @@ float zdist = 5.0;
 float rotationX = 0.0, rotationY = 0.0;
 int   last_x, last_y;
 int   width, height;
+float teste=0;
+int indiceObj=0;
 std::ifstream arquivoPly;
 std::string str;
 int numeroVertices;
 int numeroFaces;
+int numeroPropriedades = -1;
 std::vector<vertice> verticesImg;
 std::vector<face> facesImg;
+bool wireframe = false;
+bool telaCheia = false;
+float maiorY=0;
+float menorY=0;
+float maiorZ=0;
+
+std::vector<objeto> objetos;
+std::ifstream budda;
+std::ifstream coelho;
+std::ifstream vaca;
+std::ifstream dragao;
+std::ifstream dragaoCompleto;
+std::ifstream bonecoNeve;
 /* Exemplo de cálculo de vetor normal que são definidos a partir dos vértices do triângulo;
   v_2
   ^
@@ -54,6 +76,9 @@ std::vector<face> facesImg;
   +----> v_1
   v_0
 */
+
+
+
 void CalculaNormal(face t, vertice *vn)
 {
     vertice v_0 = t.verticesFace[0],
@@ -85,35 +110,52 @@ void CalculaNormal(face t, vertice *vn)
     vn->z /= len;
 }
 
-void leArquivoPly()
+void leArquivoPly(std::ifstream& arquivo)
 {
 
     bool leArquivo=true;
 
     while(leArquivo)
     {
-        arquivoPly >> str;
-        if(str=="vertex")
-            arquivoPly >> numeroVertices;
+        arquivo >> str;
+        if(str=="property")
+        {
+            numeroPropriedades++;
+            std::cout<<numeroPropriedades<<std::endl;
+        }
         else
         {
-            if(str=="face")
-                arquivoPly >> numeroFaces;
+
+            if(str=="vertex")
+                arquivo >> numeroVertices;
             else
             {
-                if(str=="end_header")
-                    leArquivo = false;
+                if(str=="face")
+                    arquivo >> numeroFaces;
+                else
+                {
+                    if(str=="end_header")
+                        leArquivo = false;
+                }
             }
+
         }
-
     }
-
     for(int  i = 0; i<numeroVertices; i ++)
     {
         vertice v;
-        arquivoPly >> v.x;
-        arquivoPly >> v.y;
-        arquivoPly >> v.z;
+        float ignorar;
+        arquivo >> v.x;
+        arquivo >> v.y;
+        arquivo >> v.z;
+        for(int j=0; j<numeroPropriedades-3;j++)
+            arquivo >> ignorar;
+        if(v.y>maiorY)
+            maiorY = v.y;
+         if(v.y<menorY)
+            menorY = v.y;
+         if(v.z>maiorZ)
+            maiorZ = v.z;
 
         verticesImg.push_back(v);
     }
@@ -121,11 +163,11 @@ void leArquivoPly()
     for(int  i = 0; i<numeroFaces; i ++)
     {
         face f;
-        arquivoPly >> f.nVertices;
+        arquivo >> f.nVertices;
         for(int j=0; j<f.nVertices; j++)
         {
             int indice;
-            arquivoPly >> indice;
+            arquivo >> indice;
             f.verticesFace.push_back(verticesImg[indice]);
         }
         CalculaNormal(f, &f.vetorNormal);
@@ -133,7 +175,18 @@ void leArquivoPly()
         facesImg.push_back(f);
     }
 
-
+    objeto obj;
+    obj.posY = maiorY - abs(menorY-maiorY)/2;
+    obj.zdist = maiorZ + abs(maiorY - obj.posY)/tan(3.14/9);
+    obj.facesImg = facesImg;
+    std::cout<<facesImg.size()<<std::endl;
+    facesImg.clear();
+    verticesImg.clear();
+    objetos.push_back(obj);
+    numeroPropriedades = -1;
+    menorY = 0;
+    maiorY = 0;
+    maiorZ = 0;
 }
 /// Functions
 void init(void)
@@ -142,8 +195,19 @@ void init(void)
     initLight(width, height); // Função extra para tratar iluminação.
     glEnable(GL_DEPTH_TEST);
 //    setMaterials();
-    arquivoPly.open("bunny.ply");
-    leArquivoPly();
+    //arquivoPly.open("cow.ply");
+    vaca.open("cow.ply");
+    budda.open("budda.ply");
+    coelho.open("bunny.ply");
+    //dragao.open("dragon.ply");
+    //dragaoCompleto.open("dragon_full.ply");
+    bonecoNeve.open("snowman.ply");
+    leArquivoPly(vaca);
+    leArquivoPly(budda);
+    leArquivoPly(coelho);
+    leArquivoPly(dragao);
+    leArquivoPly(dragaoCompleto);
+    leArquivoPly(bonecoNeve);
 
 }
 
@@ -153,17 +217,29 @@ void drawObject()
 
     vertice vetorNormal;
 
-    for(int i = 0; i < numeroFaces; i++)
+    for(int i = 0; i < objetos[indiceObj].facesImg.size(); i++)
     {
         //CalculaNormal(facesImg[i], &vetorNormal);
-        glNormal3f(facesImg[i].vetorNormal.x, facesImg[i].vetorNormal.y,facesImg[i].vetorNormal.z);
+        glNormal3f(objetos[indiceObj].facesImg[i].vetorNormal.x, objetos[indiceObj].facesImg[i].vetorNormal.y,objetos[indiceObj].facesImg[i].vetorNormal.z);
+        if(!wireframe){
         glBegin(GL_POLYGON);
-        for(int j=0; j < facesImg[i].nVertices; j++)
+        for(int j=0; j < objetos[indiceObj].facesImg[i].nVertices; j++)
         {
 
-            glVertex3d(facesImg[i].verticesFace[j].x,facesImg[i].verticesFace[j].y,facesImg[i].verticesFace[j].z);
+            glVertex3d(objetos[indiceObj].facesImg[i].verticesFace[j].x,objetos[indiceObj].facesImg[i].verticesFace[j].y,objetos[indiceObj].facesImg[i].verticesFace[j].z);
         }
         glEnd();
+        }else{
+
+        glBegin(GL_LINE_STRIP);
+        for(int j=0; j < objetos[indiceObj].facesImg[i].nVertices; j++)
+        {
+
+            glVertex3d(objetos[indiceObj].facesImg[i].verticesFace[j].x,objetos[indiceObj].facesImg[i].verticesFace[j].y,objetos[indiceObj].facesImg[i].verticesFace[j].z);
+        }
+        glEnd();
+
+        }
 
     }
 }
@@ -175,7 +251,7 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt (0.0, 0.0, zdist,0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt (0.0, objetos[indiceObj].posY, 5*objetos[indiceObj].zdist,0.0,0.0, 0.0, 0.0, 1.0, 0.0);
 
     glPushMatrix();
     glRotatef( rotationY, 0.0, 1.0, 0.0 );
@@ -208,10 +284,51 @@ void keyboard (unsigned char key, int x, int y)
 
     switch (tolower(key))
     {
+
+    case 'a':
+        if(wireframe)
+        wireframe = false;
+        else
+        wireframe = true;
+        break;
+     case 'q':
+        teste-=0.2f;
+        std::cout<<zdist<<std::endl;
+        break;
     case 27:
         exit(0);
         break;
     }
+}
+
+void specialKeysPress(int key, int x, int y)
+{
+    switch(key)
+    {
+        case GLUT_KEY_RIGHT:
+            if(indiceObj<5)
+            indiceObj++;
+            break;
+        case GLUT_KEY_LEFT:
+            if(indiceObj>0)
+            indiceObj--;
+            break;
+        case GLUT_KEY_F12:
+            if(!telaCheia)
+            {
+                glutFullScreen();
+                telaCheia = true;
+            }else
+            {
+                glutReshapeWindow(800,600);
+                telaCheia = false;
+            }
+            break;
+
+        default:
+            break;
+    }
+    glutPostRedisplay();
 }
 
 // Motion callback
@@ -256,6 +373,7 @@ int main(int argc, char** argv)
     glutMouseFunc( mouse );
     glutMotionFunc( motion );
     glutKeyboardFunc(keyboard);
+     glutSpecialFunc(specialKeysPress);
     glutIdleFunc(idle);
     glutMainLoop();
     return 0;

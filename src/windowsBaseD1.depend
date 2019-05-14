@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1557592603 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
+1557708530 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\maind1.cpp
 	<GL/glut.h>
 	<stdlib.h>
 	<stdio.h>
@@ -35,4 +35,18 @@
 	<GL/glut.h>
 
 1556135051 c:\users\andre luiz\desktop\computacao grafica\cg\src\titulo.h
+
+1557610165 source:c:\users\andre luiz\desktop\computacao grafica\cg\src\objeto.cpp
+
+1557610143 c:\users\andre luiz\desktop\computacao grafica\cg\src\objeto.h
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<math.h>
+	<iostream>
+	<fstream>
+	<string>
+	"extras.h"
+	<vector>
 
